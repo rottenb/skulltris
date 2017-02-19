@@ -10,8 +10,8 @@ local chimePlay = true
 
 function SplashScreen.load()
   setKeyBindings()
-  
-  splashFont = love.graphics.newFont("resources/font/skullphabet.ttf", 100)
+
+  splashFont = love.graphics.newFont("resources/font/skullphabet.ttf", 120)
   selectFont = love.graphics.newFont("resources/font/skullphabet.ttf", 80)
   notSelectFont = love.graphics.newFont("resources/font/skullphabet.ttf", 50)
   splashImg = love.graphics.newImage("resources/wallpaper3.jpg")
@@ -48,10 +48,10 @@ function SplashScreen.draw()
       love.graphics.setFont(selectFont)
       love.graphics.printf("PLAY", 0, 300, ww, 'center')
       love.graphics.setFont(notSelectFont)
-      love.graphics.setColor(RED)
+      love.graphics.setColor(ORANGE)
       love.graphics.printf("EXIT", 0, 400, ww, 'center')
     else
-      love.graphics.setColor(RED)
+      love.graphics.setColor(ORANGE)
       love.graphics.setFont(notSelectFont)
       love.graphics.printf("PLAY", 0, 300, ww, 'center')
       love.graphics.setFont(selectFont)

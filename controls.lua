@@ -29,7 +29,7 @@ end
 
 function setKeyBindings()
 
-  if SPLASH then
+  if GAME_STATE == SPLASH then
     bindings = {
       moveup = function() menuUp() end,
       movedown = function() menuDown() end,
@@ -43,7 +43,7 @@ function setKeyBindings()
     }
   else
     bindings = {
-      quitgame = function() love.event.quit() end,
+      quitgame = function() returnMenu() end,
       rotcw = function() rotateCW() end,
       rotccw = function() rotateCCW() end,
       moveleft = function() moveLeft() end,
@@ -224,11 +224,20 @@ function menuDown()
   end
 end
 
+function returnMenu()
+  GAME_STATE = SPLASH
+  if MUSIC then
+    hypno:stop()
+  end
+  SELECTED = PLAY
+  setKeyBindings()
+end
+
 function menuSelect()
   if SELECTED == EXIT then
     love.event.quit()
   else
-    SPLASH = false
+    GAME_STATE = GAME
     if MUSIC then
       hypno:play()
     end

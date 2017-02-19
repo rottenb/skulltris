@@ -47,6 +47,14 @@ function stackRowScan()
       end
     end
 
+    -- if there's bricks on the top row, the game is lost
+    if n > 0 and k == 2 then
+      GAME_STATE = GAME_OVER
+      gameOver.load()
+
+      return
+    end
+
     -- delete the row if completed, add a new one to the top
     if n >= 12 then
       table.insert(rows, k)

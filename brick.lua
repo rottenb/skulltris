@@ -206,7 +206,7 @@ function Brick.new(type)
 
   return {img = love.graphics.newImage(path),
                  x = w,
-                 y = TILE_SIZE,
+                 y = 0,
                  ox = Boxes[type].ox,
                  oy = Boxes[type].oy,
                  r = a,

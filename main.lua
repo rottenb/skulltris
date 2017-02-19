@@ -1,7 +1,12 @@
 DEBUG = false
 MUSIC = true
 SHADER = true
-SPLASH = true
+
+SPLASH = 1
+GAME = 2
+GAME_OVER = 3
+ROTATE_BOARD = 4
+GAME_STATE = SPLASH
 
 TEST_BRICK = 0
 
@@ -24,7 +29,9 @@ BLUE =          {  0,  0,255, 200}
 DARK_BLUE =     {  0,  0,150, 100}
 YELLOW =        {255,255,  0, 255}
 DARK_YELLOW =   {100,100,  0, 100}
-ORANGE =        {255, 153, 0, 255}
+ORANGE =        {255,153,  0, 255}
+DARK_ORANGE =   {180, 80,  0, 255}
+PINK =          {255,  0,255, 255}
 
 OUTLINE = {0,0,0,255}
 
@@ -33,6 +40,7 @@ lume = require "lume"
 shader = require "shader"
 brick = require "brick"
 splashScreen = require "splash"
+gameOver = require "game_over"
 require "stack_map"
 require "controls"
 
@@ -50,15 +58,16 @@ function love.load()
   keysFont = love.graphics.newFont("resources/font/ledcounter7.ttf", 20)
   gridFont = love.graphics.newFont("resources/font/ledcounter7.ttf", 10)
 
+  hypno = love.audio.newSource("resources/sfx/hypno.wav")
+  hypno:setLooping(true)
+
   splashScreen.load()
+  gameOver.load()
 
   waveShader = shader.new("waves", "rgb")
   waveTimer = 0.1
 
   love.keyboard.setKeyRepeat(true)
-
-  hypno = love.audio.newSource("resources/sfx/hypno.wav")
-  hypno:setLooping(true)
 
   backgroundImg = love.graphics.newImage("resources/wallpaper.jpg")
 
@@ -91,9 +100,11 @@ end -- love.load()
 
 -- UPDATE ---
 function love.update(dt)
-  if SPLASH then
-    splashScreen.update()
-  else
+  if GAME_STATE == SPLASH then
+    splashScreen.update(dt)
+  elseif GAME_STATE == GAME_OVER then
+    gameOver.update(dt)
+  elseif GAME_STATE == GAME then
     local ww = love.graphics.getWidth()
     local wh = love.graphics.getHeight()
 
@@ -156,9 +167,11 @@ end -- love.update()
 
 -- DRAW --
 function love.draw()
-  if SPLASH then
+  if GAME_STATE == SPLASH then
     splashScreen.draw()
-  else
+  elseif GAME_STATE == GAME_OVER then
+    gameOver.draw()
+  elseif GAME_STATE == GAME then
     local ww = love.graphics.getWidth()
     local wh = love.graphics.getHeight()
     local bx = ww/2-180
@@ -260,9 +273,7 @@ function love.draw()
     local sx = 1
     local sy = 1
     local r = currentBrick.r
-    if SHADER then
-      love.graphics.setShader(waveShader)
-    end
+
     love.graphics.draw(currentBrick.img, x, y, math.rad(r), sx,sy, currentBrick.ox, currentBrick.oy)
 
       -- BRICK STACK --
@@ -278,6 +289,9 @@ function love.draw()
     love.graphics.setColor(BLUE)
     love.graphics.setLineWidth(3)
     love.graphics.rectangle('line', bx, by+2, bw, bh-4, 5)
+
+    love.graphics.setColor(100, 0, 0, 255)
+    love.graphics.line(bx+2, TILE_SIZE, bx+358, TILE_SIZE)
 
     -- NEXT BLOCK --
     love.graphics.setColor(GREEN)
