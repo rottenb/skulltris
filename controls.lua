@@ -28,7 +28,6 @@ function toggleDebug()
 end
 
 function setKeyBindings()
-
   if GAME_STATE == SPLASH then
     bindings = {
       moveup = function() menuUp() end,
@@ -104,6 +103,10 @@ function inputHandler(input)
 end
 
 function love.keypressed(key, scancode, isrepeat)
+  if GAME_STATE == GAME_OVER then
+    love.event.quit()
+  end
+  
   local binding = keys[key]
   return inputHandler(binding)
 end

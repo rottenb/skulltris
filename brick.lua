@@ -244,4 +244,35 @@ function Brick.copy(src)
   return dest
 end
 
+function Brick.draw()
+  -- CURRENT BRICK --
+  love.graphics.setColor(WHITE)
+  local x = currentBrick.x+currentBrick.ox
+  local y = currentBrick.y+currentBrick.oy
+  local sx = 1
+  local sy = 1
+  local r = currentBrick.r
+
+  love.graphics.draw(currentBrick.img, x, y, math.rad(r), sx,sy, currentBrick.ox, currentBrick.oy)
+
+  -- BRICK STACK --
+  love.graphics.setColor(LIGHT_GREY)
+  r = math.random(-1,1)
+  love.graphics.draw(stackCanvas, WW/2-180, 0)
+
+  -- NEXT BLOCK --
+  x, y, r, sx, sy = 700, 106, 0, 1, 1
+  if SHADER then
+    x = WW/2+292 + math.random(-1, 1)
+    y = 106 + math.random(-1, 1)
+    sx = math.random(0.9, 1.1)
+    sy = math.random(0.9, 1.1)
+    r = math.random(-2, 2)
+  end
+
+  love.graphics.setColor(GREY)
+  love.graphics.draw(nextBrick.img, x, y, math.rad(r), sx, sy, nextBrick.ox, nextBrick.oy)
+
+end
+
 return Brick
